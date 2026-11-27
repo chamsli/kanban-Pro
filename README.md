@@ -268,6 +268,4 @@ Kanban Pro amplía la aplicación original AC6 mediante nuevas funcionalidades o
 
 La integración de Apache ECharts permite visualizar de forma gráfica la distribución del tiempo, mientras que Driver.js facilita el aprendizaje de la nueva funcionalidad mediante un tutorial interactivo.
 
-Además, localStorage permite conservar las tareas y planificaciones, y canvas-confetti añade una animación al completar objetivos.#   K a n b a n P r o 
- 
- 
+Además, localStorage permite conservar las tareas y planificaciones, y canvas-confetti añade una animación al completar objetivos.#
