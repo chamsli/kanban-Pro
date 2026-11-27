@@ -1,10 +1,15 @@
 <!DOCTYPE html>
-<html lang="ca">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gestor de Projectes - Pràctica DAW JS</title>
   <link rel="stylesheet" href="styles.css">
+  <!-- Driver.js styles -->
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/driver.js@1.10.2/dist/driver.min.css"
+>
 </head>
 <body>
 
@@ -12,18 +17,26 @@
     <h1>Board Manager DAW</h1>
     <!-- MÒDUL 5: Custom Element amb Shadow DOM -->
     <task-badge id="global-badge" count="0"></task-badge>
+
+    <nav class="main-nav">
+      <button id="show-board-btn">My Board</button>
+    
+      <button id="show-planner-btn">Daily Planner</button>
+    
+      <button id="help-btn">❔ Help</button>
+    </nav>
   </header>
 
   <div class="form-container">
     <form id="new-task-form" class="form-group">
-      <input type="text" id="task-title-input" placeholder="Títol de la tasca..." required>
-      <input type="text" id="task-desc-input" placeholder="Descripció..." required>
+      <input type="text" id="task-title-input" placeholder="Task title..." required>
+      <input type="text" id="task-desc-input" placeholder="Task description..." required>
       <select id="task-status-select">
-        <option value="todo">Per fer</option>
-        <option value="in-progress">En procés</option>
-        <option value="done">Completat</option>
+        <option value="todo">To Do</option>
+        <option value="in-progress">In Progress</option>
+        <option value="done">Done</option>
       </select>
-      <button type="submit" class="btn-primary">Afegir Tasca</button>
+      <button type="submit" class="btn-primary">+ Add Task</button>
     </form>
   </div>
 
@@ -31,7 +44,7 @@
     <!-- Columna 1 -->
     <section class="column" data-status="todo">
       <div class="column-header">
-        <h2>📋 Per fer</h2>
+        <h2>📋 To Do</h2>
         <span class="toggle-icon">▼</span>
       </div>
       <div class="column-content" id="todo-list"></div>
@@ -40,7 +53,7 @@
     <!-- Columna 2 -->
     <section class="column" data-status="in-progress">
       <div class="column-header">
-        <h2>⚙️ En procés</h2>
+        <h2>⚙️ In Progress</h2>
         <span class="toggle-icon">▼</span>
       </div>
       <div class="column-content" id="in-progress-list"></div>
@@ -49,12 +62,88 @@
     <!-- Columna 3 -->
     <section class="column" data-status="done">
       <div class="column-header">
-        <h2>✅ Completat</h2>
+        <h2>✅ Done</h2>
         <span class="toggle-icon">▼</span>
       </div>
       <div class="column-content" id="done-list"></div>
     </section>
   </main>
+
+  <!-- DAILY PLANNER -->
+  <section id="planner-section" class="planner-section hidden">
+  
+    <div class="planner-header">
+      <div>
+        <h2>Daily Planner</h2>
+        <p>Organize your time and focus on what matters.</p>
+      </div>
+  
+      <input type="date" id="planner-date">
+    </div>
+  
+    <div class="planner-controls">
+  
+      <div>
+        <label for="available-hours">
+          Available hours today
+        </label>
+  
+        <input type="number" id="available-hours" min="0.5" max="24" step="0.5" value="4">
+      </div>
+  
+      <div>
+        <label for="planner-task-select">
+          Select a task
+        </label>
+  
+        <select id="planner-task-select">
+          <option value="">Choose a task</option>
+        </select>
+      </div>
+  
+      <div>
+        <label for="task-duration">
+          Duration (minutes)
+        </label>
+  
+        <input type="number" id="task-duration" min="5" step="5" value="30">
+      </div>
+  
+      <button id="add-to-plan-btn" class="btn-primary">
+        + Add to my plan
+      </button>
+  
+    </div>
+  
+    <div class="planner-dashboard">
+  
+      <div class="chart-card">
+  
+        <h3>My time distribution</h3>
+  
+        <div id="time-chart"></div>
+  
+      </div>
+  
+      <div class="planned-tasks-card">
+  
+        <h3>My planned tasks</h3>
+  
+        <div id="planned-task-list"></div>
+  
+        <div class="planner-summary">
+          <p>Available: <span id="total-available">240</span> min</p>
+  
+          <p>Planned: <span id="total-planned">0</span> min</p>
+  
+          <p>Remaining: <span id="remaining-time">240</span> min</p>
+        </div>
+  
+      </div>
+  
+    </div>
+  
+  </section>
 
   <!-- MÒDUL 1: TEMPLATE HTML PER A LES TARGETES -->
   <template id="task-card-template">
@@ -63,17 +152,26 @@
       <p class="task-desc"></p>
       <div class="actions">
         <select class="task-status-select">
-          <option value="todo">Per fer</option>
-          <option value="in-progress">En procés</option>
-          <option value="done">Completat</option>
+          <option value="todo">To Do</option>
+          <option value="in-progress">In Progress</option>
+          <option value="done">Done</option>
         </select>
         <button class="btn-up">▲</button>
         <button class="btn-down">▼</button>
-        <button class="btn-delete">Eliminar</button>
+        <button class="btn-delete">Delete</button>
       </div>
     </article>
   </template>
 
   <script src="app.js"></script>
+  <!-- ECharts -->
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5.6.0/dist/echarts.min.js"></script>
+  
+  <!-- Driver.js -->
+  <script src="https://cdn.jsdelivr.net/npm/driver.js@1.10.2/dist/driver.js.iife.min.js"></script>
+  
+  <!-- Fireworks -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.4/dist/confetti.browser.min.js"></script>
+  
 </body>
 </html>
