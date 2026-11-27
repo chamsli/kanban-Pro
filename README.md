@@ -260,7 +260,7 @@ kanban-pro/
 ## 9. Publicación
 
 La aplicación se publica mediante GitHub Pages.
-Enlace:
+Enlace:https://chamsli.github.io/kanban-Pro/
 
 ## 10. Conclusión
 
